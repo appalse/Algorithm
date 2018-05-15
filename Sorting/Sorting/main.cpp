@@ -33,30 +33,29 @@ void SelectionSort(T data[], size_t len) {
 }
 
 template <typename T>
-void MergeSort(T data[], size_t left, size_t right) {
-	const size_t len = right - left + 1;
-	if (len < 2)
-		return;
-	size_t mid = left + len / 2 - 1;
-	MergeSort(&data[0], left, mid);
-	MergeSort(&data[0], mid + 1, right);
-	size_t current_left = left;
-	size_t current_right = mid + 1;
-	size_t i = 0;
-	std::vector<T> buf;
-	while (i < len) {
-		if (current_right > right || data[current_left] <= data[current_right] && current_left <= mid) {
-			buf.push_back(data[current_left]);
-			++current_left;
-		} else if (current_left > mid || data[current_right] <= data[current_left] && current_right <= right) {
-			buf.push_back(data[current_right]);
-			++current_right;
-		}
-		++i;
-	}
-	for (size_t i = 0; i < len; ++i) {
-		data[i + left] = buf[i];
-	}
+void MergeSort(T data[], int left, int right) {
+    if (right == left)
+        return;
+    int mid = (left + right)/2;
+    MergeSort(data, left, mid);
+    MergeSort(data, mid + 1, right);
+    const int buffLength = right - left+ 1;
+    std::vector<T> buff(buffLength);
+    int currentLeft = left;
+    int currentRight = mid + 1;
+    for (int step = 0; step < buffLength; ++step) {
+        if (data[currentLeft] < data[currentRight] && currentLeft <= mid || currentRight > right) {
+            buff[step] = data[currentLeft];
+            ++currentLeft;
+        } else {
+            buff[step] = data[currentRight];
+            ++currentRight;
+        }
+    }
+
+    for (int step = 0; step < buffLength; ++step) {
+        data[left + step] = buff[step];
+    }
 }
 
 
