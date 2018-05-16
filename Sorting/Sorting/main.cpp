@@ -58,6 +58,26 @@ void MergeSort(T data[], int left, int right) {
     }
 }
 
+template <typename T>
+void QuickSort(T data[], int left, int right) {
+    if (right < left)
+        return;
+    int mid = data[(left + right) / 2];
+    int currentLeft = left;
+    int currentRight = right;
+    while (currentLeft <= currentRight) {
+        while (data[currentLeft] < mid) ++currentLeft;
+        while (data[currentRight] > mid) --currentRight;
+        if (currentLeft <= currentRight) {
+            std::swap(data[currentLeft], data[currentRight]);
+            ++currentLeft;
+            --currentRight;
+        }
+    }
+    QuickSort(data, left, currentRight);
+    QuickSort(data, currentLeft, right);
+}
+
 
 int main() {
 	{
@@ -84,6 +104,14 @@ int main() {
 		auto len = sizeof(data) / sizeof(data[0]);
 		Print(&data[0], len);
 		MergeSort(&data[0], 0, len-1);
+		Print(&data[0], len);
+	}
+	{
+		std::cout << "Quick sort:" << std::endl;
+		int data[] = { 5, 4, 3, 1, 2, 10 };
+		auto len = sizeof(data) / sizeof(data[0]);
+		Print(&data[0], len);
+		QuickSort(&data[0], 0, len-1);
 		Print(&data[0], len);
 	}
 	system("pause");
