@@ -1,118 +1,59 @@
 #include <iostream>
 #include <utility>
 #include <vector>
+#include "sort.h"
+#include <cstdlib>
+#include <ctime>
 
 template <typename T>
-void Print(T data[], size_t len) {
-	for (size_t i = 0; i < len; ++i)
+void Print(T data[], size_t size) {
+	for (size_t i = 0; i < size; ++i)
 		std::cout << data[i] << " ";
 	std::cout << std::endl;
 }
 
 template <typename T>
-void InsertionSort(T data[], size_t len) {
-	for (size_t i = 1; i < len; ++i) 
-		for (int j = i; j > 0; --j) 
-			if (data[j] < data[j-1]) 
-				std::swap(data[j], data[j - 1]);
+void generate(T data[], size_t size) {
+	for (size_t i = 0; i < size; ++i)
+		data[i] = std::rand() % 100;
 }
-
-template <typename T>
-void SelectionSort(T data[], size_t len) {
-	for (size_t i = 0; i < len - 1; ++i) {
-		T minItem = data[i];
-		size_t minIndex = i;
-		for (size_t j = i + 1; j < len; ++j)
-			if (data[j] < minItem) {
-				minItem = data[j];
-				minIndex = j;
-			}
-		if (minIndex != i)
-			std::swap(data[i], data[minIndex]);
-	}
-}
-
-template <typename T>
-void MergeSort(T data[], int left, int right) {
-    if (right == left)
-        return;
-    int mid = (left + right)/2;
-    MergeSort(data, left, mid);
-    MergeSort(data, mid + 1, right);
-    const int buffLength = right - left+ 1;
-    std::vector<T> buff(buffLength);
-    int currentLeft = left;
-    int currentRight = mid + 1;
-    for (int step = 0; step < buffLength; ++step) {
-        if (data[currentLeft] < data[currentRight] && currentLeft <= mid || currentRight > right) {
-            buff[step] = data[currentLeft];
-            ++currentLeft;
-        } else {
-            buff[step] = data[currentRight];
-            ++currentRight;
-        }
-    }
-
-    for (int step = 0; step < buffLength; ++step) {
-        data[left + step] = buff[step];
-    }
-}
-
-template <typename T>
-void QuickSort(T data[], int left, int right) {
-    if (right < left)
-        return;
-    int mid = data[(left + right) / 2];
-    int currentLeft = left;
-    int currentRight = right;
-    while (currentLeft <= currentRight) {
-        while (data[currentLeft] < mid) ++currentLeft;
-        while (data[currentRight] > mid) --currentRight;
-        if (currentLeft <= currentRight) {
-            std::swap(data[currentLeft], data[currentRight]);
-            ++currentLeft;
-            --currentRight;
-        }
-    }
-    QuickSort(data, left, currentRight);
-    QuickSort(data, currentLeft, right);
-}
-
 
 int main() {
+	std::srand(time(0));
+	const int size = 10;
 	{
 		std::cout << "Insertion sort:" << std::endl;
-		int data[] = { 5, 4, 3, 1, 2, 10 };
-		auto len = sizeof(data) / sizeof(data[0]);
-		Print(&data[0], len);
-		InsertionSort(&data[0], len);
-		Print(&data[0], len);
+		int data[size];
+		generate(data, size);
+		Print(&data[0], size);
+		InsertionSort(&data[0], size);
+		Print(&data[0], size);
 	}
 
 	{
 		std::cout << "Selection sort:" << std::endl;
-		int data[] = { 5, 4, 3, 1, 2, 10 };
-		auto len = sizeof(data) / sizeof(data[0]);
-		Print(&data[0], len);
-		SelectionSort(&data[0], len);
-		Print(&data[0], len);
+		int data[size];
+		generate(data, size);
+		Print(&data[0], size);
+		SelectionSort(&data[0], size);
+		Print(&data[0], size);
 	}
 
 	{
 		std::cout << "Merge sort:" << std::endl;
-		int data[] = { 5, 4, 3, 1, 2, 10 };
-		auto len = sizeof(data) / sizeof(data[0]);
-		Print(&data[0], len);
-		MergeSort(&data[0], 0, len-1);
-		Print(&data[0], len);
+		int data[size];
+		generate(data, size);
+		Print(&data[0], size);
+		MergeSort(&data[0], 0, size -1);
+		Print(&data[0], size);
 	}
 	{
 		std::cout << "Quick sort:" << std::endl;
-		int data[] = { 5, 4, 3, 1, 2, 10 };
-		auto len = sizeof(data) / sizeof(data[0]);
-		Print(&data[0], len);
-		QuickSort(&data[0], 0, len-1);
-		Print(&data[0], len);
+		int data[size];
+		generate(data, size);
+		Print(&data[0], size);
+		QuickSort(&data[0], 0, size -1);
+		Print(&data[0], size);
 	}
 	system("pause");
 	return 0;
